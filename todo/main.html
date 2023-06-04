@@ -62,27 +62,27 @@
         margin-top: 10px;
         display: flex;
     }
-    
+
     #list>li:hover {
         transform: scale(1.03);
         transition-duration: 0.3s;
-        
+
     }
-    .footer{
+
+    .footer {
         margin-bottom: 10px;
     }
-    .footer > .alldelbtn{
-        margin-left:583px;
+
+    .footer>.alldelbtn {
+        margin-left: 583px;
         border: 2px solid;
         border-radius: 3px;
         cursor: pointer;
     }
-
 </style>
 <script>
     function addToDo() {
-        if (addValue.value == "") {
-        } else {
+        if (addValue.value == "") {} else {
 
             const del = document.createElement('button');
 
@@ -109,6 +109,7 @@
             })
 
             addValue.value = "";
+            addValue.focus();
             document.getElementById('list').appendChild(li).appendChild(del);
 
             del.append("x")
@@ -123,23 +124,28 @@
 
     }
 
+    function enterkey() {
+        if (window.event.keyCode == 13) {
+
+           addToDo();
+        }
+    }
 
     function deleteList(e) {
         var dtg = e.target.parentElement;
         dtg.remove();
     }
-    
-    function deleteAll() {
-        list.innerText = "" ; 
-    }
 
+    function deleteAll() {
+        list.innerText = "";
+    }
 </script>
 
 <body>
     <div class="header">
         <h1 class="headeLine">할 일</h1>
         <div class="upload">
-            <input type="text" id="addValue" placeholder="일정 추가..." autofocus />
+            <input type="text" id="addValue" placeholder="일정 추가..." onkeyup="enterkey()" autofocus />
             <button type="button" class="inbtn" onclick="addToDo()">추가</button>
         </div>
     </div>
@@ -150,6 +156,4 @@
     <div class="footer">
         <button type="button" class="alldelbtn" onclick="deleteAll()">전부 삭제</button>
     </div>
-</body>
-
-</html>
+</body></html>
