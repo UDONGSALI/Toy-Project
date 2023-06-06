@@ -71,14 +71,6 @@
         border: none;
     }
 
-    #col14 {
-        grid-column-start: 4;
-        grid-column-end: 5;
-        grid-row-start: 3;
-        grid-row-end: 5;
-        line-height: 220px;
-    }
-
     .number {
         cursor: pointer;
     }
@@ -87,6 +79,16 @@
         background: #999 !important;
     }
 
+    #trans {
+        position: absolute;
+        text-decoration: none;
+        font-size: 20px;
+        margin-top: -29px;
+        margin-left: 10px;
+        border: 2px solid;
+        border-radius: 3px;
+        color: black;
+    }
 </style>
 <script src="jquery-3.7.0.min.js"></script>
 <script>
@@ -95,63 +97,70 @@
     $(function() {
         $('button').click(function() {
 
+            $('#addValue').focus();
+
             var inputData = $(this).text();
             
-            if(inputData == "="){
-                
-            }else{
-                
-            if(inputData == "C"){//전체삭제
-                txt = "";
-                $('#addValue').val(txt);
-            }
-            
-            if (inputData == "←") { // 지움키가 나오면 마지막 글자를 지움
-                txt = txt.slice(0, -1);
-                $('#addValue').val(txt);
-            } else {
-
-                if (txt == "") {
-                    if (!$.isNumeric(inputData)) { // 첫 글자가 숫자가 아니면 입력 X
-                        if(inputData == "."){
-                           txt += inputData;
-                            $('#addValue').val(txt);
-                        }
-                    } else { // 첫 글자가 숫자면 입력 가능
+            if (txt == "") {// 처음 입력
+                if (!$.isNumeric(inputData)) { // 첫 글자가 숫자가 아니면 입력 X
+                    if (inputData == "." || inputData == "(") { //., 괄호등은 처음 입력 가능하게 예외
                         txt += inputData;
                         $('#addValue').val(txt);
                     }
-                } else { // 첫 글자가 쓰이고 난 후
-                    var temp = txt.substr(-1); //다음 글자
-
-                    if (!$.isNumeric(temp)) { // 마지막 글자가 숫자가 아니면
-                        if (!$.isNumeric(inputData)) { // 새로 입력한 글자가 숫자가 아니면                 
-                            txt = txt.slice(0, -1); //마지막 글자를 지우고
-                            txt += inputData; //txt에 새로운 글저 추가
-                            $('#addValue').val(txt); //txt 출력
-                        } else { //새로 입력한 글자가 숫자면 무난하게 진행
-                            txt += inputData;
-                            console.log(txt);
-                            $('#addValue').val(txt);
-                        }
-                    } else { // 마지막 글자가 숫자면 무난하게 진행
+                } else { // 첫 글자가 숫자면 입력 가능
+                    txt += inputData;
+                    $('#addValue').val(txt);
+                }
+            } else {// 첫 글자가 쓰이고 난 후
+                var temp = txt.substr(-1); //마지막 글자
+                
+                if(temp == ")"){// 닫는 괄호 뒤에는 연산자가 오도록
+                    if(!$.isNumeric(inputData)){
+                    txt += inputData;
+                    $('#addValue').val(txt);
+                    }
+                }else if (temp == "(") {//여는 괄호 뒤에는 숫자, 여는 괄호만 오게
+                    if($.isNumeric(inputData) || inputData == "(" || inputData == "←"){
+                    txt += inputData;
+                    $('#addValue').val(txt);
+                    }
+                }else if ($.isNumeric(temp)) {// 마지막 글자에 숫자면 무난하게 진행
+                    txt += inputData;
+                    $('#addValue').val(txt);
+                }else { // 마지막 글자가 괄호와 숫자가 아니면(연산자 이면)
+                    if ($.isNumeric(inputData) || inputData == "(" || inputData == "←") { //새로 입력한 글자가 숫자와 괄호면 무난하게 진행
                         txt += inputData;
                         $('#addValue').val(txt);
-                    }         
+                    }else{//연산자이면 새로운 연산자로 교체
+                        txt = txt.slice(0, -1); //마지막 글자를 지우고
+                        txt += inputData; //txt에 새로운 글저 추가
+                        $('#addValue').val(txt); //txt 출력
+                    }
                 }
             }
+            
+            //특수 처리
+            if (inputData == "←") { // 지움키가 나오면 마지막 글자를 지움
+                txt = txt.slice(0, -2);
+                $('#addValue').val(txt);
+            }else if (inputData == "C" || inputData == "=") { //전체삭제
+                txt = "";
+                $('#addValue').val(txt);
+            }else if (inputData == "(") { //괄호 변경
+                $('#bracket').text(")");
+            } else if (inputData == ")") {
+                $('#bracket').text("(");
             }
             
         });
     });
-
 </script>
 
 <body>
     <div class="header">
         <h1 class="headeLine"></h1>
         <div class="upload">
-            <input type="text" id="addValue" value="" />
+            <input type="text" id="addValue" value="" autofocus>
         </div>
     </div>
     <div class="container">
@@ -183,7 +192,7 @@
             <button type="button" class="number" id="*">*</button>
         </div>
         <div class="gid" id="col10">
-            <button type="button" class="number" id="/">/</button>
+            <button type="button" class="number" id="+">+</button>
         </div>
         <div class="gid" id="col11">
             <button type="button" class="number" id="1">1</button>
@@ -195,7 +204,7 @@
             <button type="button" class="number" id="3">3</button>
         </div>
         <div class="gid" id="col14">
-            <button type="button" class="number" id="+">+</button>
+            <button type="button" class="number" id="/">/</button>
         </div>
         <div class="gid" id="col15">
             <button type="button" class="number" id="-">-</button>
@@ -210,12 +219,13 @@
             <button type="button" class="number" id="%">%</button>
         </div>
         <div class="gid" id="col19">
+            <button type="button" class="number" id="bracket">(</button>
+        </div>
+        <div class="gid" id="col20">
             <button type="submit" class="number" id="=">=</button>
         </div>
     </div>
     <div class="footer">
 
     </div>
-</body>
-
-</html>
+</body></html>
