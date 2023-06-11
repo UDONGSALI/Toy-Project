@@ -59,6 +59,7 @@ public class CalculatorServlet extends HttpServlet {
 					minus = true;
 				} else if (stack.size() == 0) {
 					stack.push(newBie);
+					minus = true;
 				} else if (newBie.equals(")")) {
 					while (true) {
 						if (stack.peek().equals("(")) {
@@ -83,6 +84,7 @@ public class CalculatorServlet extends HttpServlet {
 							if (nbLevel > topLevel) {
 								break;
 							} else {
+								System.out.println("연산자 확인" + stack.peek());
 								list.add(stack.pop());
 								minus = true;
 							}
@@ -162,7 +164,7 @@ public class CalculatorServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		String value = (String) request.getParameter("value");
 		PrintWriter witer = response.getWriter();
-
+		System.out.println("작동확인");
 		double result = postfixCalc(postfixOper(value));
 		if (result % 1 == 0) {
 			witer.print((long) postfixCalc(postfixOper(value)));
