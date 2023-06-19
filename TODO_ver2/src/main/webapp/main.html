@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
+    * {
+        text-align: center;
+        font-family: 'Nanum Pen Script', cursive;
+        font-size: 30px;
+    }
+
+    body {
+        margin: auto;
+        margin-top: 50px;
+        width: 700px;
+        border: 2px solid;
+        border-radius: 7px;
+    }
+
+    .header>.headeLine {
+        font-size: 40px;        
+    }
+
+    .upload {
+        position: relative;
+        margin: auto;
+        width: 90%;
+    }
+
+    .upload>#addValue {
+        position: relative;
+        width: 80%;
+        border: 2px solid;
+        border-radius: 3px;
+    }
+
+    .upload>.inbtn {
+        position: relative;
+        width: 10%;
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .container {
+        position: relative;
+        margin: auto;
+        width: 90%;
+    }
+
+    #list {
+        position: relative;
+    }
+
+    #list>li {
+        position: relative;
+        margin-bottom: 8px;
+        margin-left: -16px;
+        width: 98%;
+        border: 2px solid;
+        border-radius: 3px;
+        list-style: none;
+        display: flex;
+    }
+
+    #list>li:hover {
+        transform: scale(1.03);
+        transition-duration: 0.3s;
+
+    }
+
+    .footer {
+        margin-bottom: 10px;
+    }
+
+    .footer>.alldelbtn {
+        margin-left: 583px;
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+</style>
+<script>
+    function addToDo() {
+        if (addValue.value == "") {} else {
+
+            const li = document.createElement("li"); // li 생성
+
+            li.setAttribute('id', "result");
+            li.setAttribute('class', "lili");
+            
+            const textbar = document.createElement('div'); // li안 글자쓸 공간 생성
+            
+            const del = document.createElement('button'); // 삭제버튼 생성
+
+            const addValue2 = document.getElementById('addValue').value; // 글자를 변수로
+
+            const textNode = document.createTextNode(addValue2); // 글자를 text바 안에 집어넣음
+            textbar.appendChild(textNode);
+
+            var onoff = 0; // 누르면 줄이 생겼다 사라졌다 할 수 있게
+            li.addEventListener("click", function() {
+                onoff++;
+                if (onoff % 2 == 1) {
+                    textbar.style.textDecoration = "line-through";
+                    textbar.style.color = "gray";
+                } else {
+                    textbar.style.textDecoration = "none";
+                    textbar.style.color = "black";
+                }
+            })
+
+            addValue.value = ""; // 입력시 인풋태그 비움
+            addValue.focus();// 입력후 포커스
+
+            document.getElementById('list').appendChild(li).appendChild(textbar);//li에 텍스트바 추가
+            textbar.style.width = "95%";
+            textbar.style.whiteSpace = "nowrap";
+            textbar.style.overflow = "hidden";
+            textbar.style.textOverflow = "ellipsis";
+            textbar.style.textAlign = "left";
+
+            document.getElementById('list').appendChild(li).appendChild(del);//li에 삭제버튼 추가
+            del.append("x")
+            del.style.border = "none";
+            del.style.borderLeft = "2px solid";   
+            del.style.marginLeft = "auto";
+            del.addEventListener("click", deleteList);
+        }
+
+    }
+
+    function enterkey() {
+        if (window.event.keyCode == 13) {
+            addToDo();
+        }
+    }
+
+    function deleteList(e) {
+        var dtg = e.target.parentElement;
+        dtg.remove();
+    }
+
+    function deleteAll() {
+        list.innerText = "";
+    }
+
+</script>
+
+<body>
+    <div class="header">
+        <h1 class="headeLine">할 일</h1>
+        <div class="upload">
+            <input type="text" id="addValue" placeholder="일정 추가..." onkeypress="enterkey()" autofocus />
+            <button type="button" class="inbtn" onclick="addToDo()">추가</button>
+        </div>
+    </div>
+    <div class="container">
+        <ul id="list">
+        </ul>
+    </div>
+    <div class="footer">
+        <button type="button" class="alldelbtn" onclick="deleteAll()">전부 삭제</button>
+    </div>
+</body>
+
+</html>
