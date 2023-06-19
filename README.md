@@ -1,6 +1,6 @@
 ```mermaid
 gantt
-    title TODO ver2.0 Gantt Diagram
+    title TODO ver2.0
     dateFormat  YYYY-MM-DD
     section 환경설정
     vs코드 이클립스 연결:2023-06-19, 1d
