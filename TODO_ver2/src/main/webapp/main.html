@@ -23,7 +23,7 @@
     }
 
     .header>.headeLine {
-        font-size: 40px;        
+        font-size: 40px;
     }
 
     .upload {
@@ -37,6 +37,7 @@
         width: 80%;
         border: 2px solid;
         border-radius: 3px;
+        background-color: floralwhite
     }
 
     .upload>.inbtn {
@@ -49,23 +50,48 @@
 
     .container {
         position: relative;
-        margin: auto;
-        width: 90%;
+        margin-left: 33.3px;
+        margin-top: 15px;
+        width: 91.7%;
+        height: 300px;
+        overflow-y: scroll;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        /* 스크롤바의 너비 */
+        border-radius: 5px;
+        display: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        height: 10px;
+        /* 스크롤바의 길이 */
+        background: #999999;
+        /* 스크롤바의 색상 */
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, .1);
+        /*스크롤바 뒷 배경 색상*/
     }
 
     #list {
         position: relative;
+        margin-top: 0px;
     }
 
     #list>li {
         position: relative;
         margin-bottom: 8px;
-        margin-left: -16px;
-        width: 98%;
+        margin-left: -15.5px;
+        width: 96.5%;
         border: 2px solid;
         border-radius: 3px;
         list-style: none;
         display: flex;
+        background-color: floralwhite
     }
 
     #list>li:hover {
@@ -74,67 +100,141 @@
 
     }
 
-    .footer {
-        margin-bottom: 10px;
+    #list>li>#textbar {
+        width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
     }
 
-    .footer>.alldelbtn {
-        margin-left: 583px;
+    #list>li>#del {
+        margin-left: auto;
+        border: none;
+        border-left: 2px solid;
+    }
+
+    #body>#modal {
+        position: absolute;
+        width: 640px;
+        height: 355px;
+        left: 50%;
+        margin-left: -322px;
+        top: 150px;
+        border: 2px solid;
+        z-index: 2;
+        background-color: white;
+        word-break: break-all;
+        text-align: left;
+        overflow-y: scroll;
+        border-radius: 5px;
+        letter-spacing: 1px;
+        line-height: 120%;
+        background-color: floralwhite
+    }
+
+    .footer {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .footer>#todoCount {
+        position: absolute;
+        cursor: pointer;
+        width: 50px;
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: 40px;
+    }
+
+    .footer>#alldelbtn {
         border: 2px solid;
         border-radius: 3px;
         cursor: pointer;
+        width: 100px;
+        margin-left: 190px;
+        margin-top: 10px;
+    }
+
+    .footer>#model2 {
+        position: relative;
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100px;
+        margin-left: 300px;
+        margin-top: 10px;
+        visibility: hidden;
     }
 
 </style>
+
 <script>
+    var count = 0;
+
     function addToDo() {
         if (addValue.value == "") {} else {
+            
+            count++;
+            todoCount.textContent = count;
 
-            const li = document.createElement("li"); // li 생성
+            const li = document.createElement("li"); // li 선언
 
             li.setAttribute('id', "result");
-            li.setAttribute('class', "lili");
-            
-            const textbar = document.createElement('div'); // li안 글자쓸 공간 생성
-            
-            const del = document.createElement('button'); // 삭제버튼 생성
+
+            const textbar = document.createElement('div'); // li안 글자쓸 공간 선언
+
+            textbar.setAttribute('id', "textbar");
+
+            const modal = document.createElement('div'); // modal 선언
+
+            modal.setAttribute('id', "modal");
+
+            const del = document.createElement('button'); // 삭제버튼 선언
+
+            del.setAttribute('id', "del");
+
+            const model = document.createElement('button'); // 삭제버튼 선언
+            model.setAttribute('id', "model");
 
             const addValue2 = document.getElementById('addValue').value; // 글자를 변수로
 
             const textNode = document.createTextNode(addValue2); // 글자를 text바 안에 집어넣음
             textbar.appendChild(textNode);
 
-            var onoff = 0; // 누르면 줄이 생겼다 사라졌다 할 수 있게
-            li.addEventListener("click", function() {
-                onoff++;
-                if (onoff % 2 == 1) {
-                    textbar.style.textDecoration = "line-through";
-                    textbar.style.color = "gray";
-                } else {
-                    textbar.style.textDecoration = "none";
-                    textbar.style.color = "black";
-                }
-            })
+
 
             addValue.value = ""; // 입력시 인풋태그 비움
-            addValue.focus();// 입력후 포커스
+            addValue.focus(); // 입력후 포커스
 
-            document.getElementById('list').appendChild(li).appendChild(textbar);//li에 텍스트바 추가
-            textbar.style.width = "95%";
-            textbar.style.whiteSpace = "nowrap";
-            textbar.style.overflow = "hidden";
-            textbar.style.textOverflow = "ellipsis";
-            textbar.style.textAlign = "left";
+            document.getElementById('list').appendChild(li).appendChild(textbar); //li에 텍스트바 추가
 
-            document.getElementById('list').appendChild(li).appendChild(del);//li에 삭제버튼 추가
-            del.append("x")
-            del.style.border = "none";
-            del.style.borderLeft = "2px solid";   
-            del.style.marginLeft = "auto";
+            del.append("x");
             del.addEventListener("click", deleteList);
+            document.getElementById('list').appendChild(li).appendChild(del); //li에 삭제버튼 추가
+
+            //            var onoff = 0; // 누르면 줄이 생겼다 사라졌다 할 수 있게
+            //            li.addEventListener("click", function() {                
+            //                onoff++;              클릭으로 줄긋기
+            //                if (onoff % 2 == 1) {
+            //                    textbar.style.textDecoration = "line-through";
+            //                    textbar.style.color = "gray";
+            //                } else {
+            //                    textbar.style.textDecoration = "none";
+            //                    textbar.style.color = "black";
+            //                }
+            //            })
+
+            textbar.addEventListener("click", function() {
+                model2.style.visibility = "visible";
+                modal.textContent = textbar.textContent;
+                document.getElementById('body').appendChild(modal); //li에 모달 추가
+            })
+
         }
 
     }
+
 
     function enterkey() {
         if (window.event.keyCode == 13) {
@@ -145,15 +245,27 @@
     function deleteList(e) {
         var dtg = e.target.parentElement;
         dtg.remove();
+        count--;
+        todoCount.textContent = count;
+    }
+
+    function delmodal() {
+        modal.remove();
+        model2.style.visibility = "hidden";
     }
 
     function deleteAll() {
+        count = 0;
+        todoCount.textContent = count;
         list.innerText = "";
+        modal.remove();
+        model2.style.visibility = "hidden";
     }
+    
 
 </script>
 
-<body>
+<body id="body">
     <div class="header">
         <h1 class="headeLine">할 일</h1>
         <div class="upload">
@@ -166,7 +278,11 @@
         </ul>
     </div>
     <div class="footer">
-        <button type="button" class="alldelbtn" onclick="deleteAll()">전부 삭제</button>
+        <div id="todoCount">0</div>
+
+        <button type="button" id="model2" onclick="delmodal()">닫기</button>
+
+        <button type="button" id="alldelbtn" onclick="deleteAll()">전부 삭제</button>
     </div>
 </body>
 
