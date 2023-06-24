@@ -100,6 +100,14 @@
 
     }
 
+    #list>li>.ckbox {
+        width: 25px;
+    }
+
+    #list>li>.ckbox:checked {
+        background-color: gainsboro;
+    }
+
     #list>li>#textbar {
         width: 95%;
         white-space: nowrap;
@@ -141,10 +149,28 @@
     .footer>#todoCount {
         position: absolute;
         cursor: pointer;
-        width: 50px;
-        margin-left: 10px;
+        width: 90px;
+        margin-left: 5px;
         margin-top: 10px;
-        font-size: 40px;
+        font-size: 30px;
+    }
+
+    .footer>#compCount {
+        position: absolute;
+        cursor: pointer;
+        width: 90px;
+        margin-left: 90px;
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .footer>#waitCount {
+        position: absolute;
+        cursor: pointer;
+        width: 90px;
+        margin-left: 175px;
+        margin-top: 10px;
+        font-size: 30px;
     }
 
     .footer>#alldelbtn {
@@ -166,21 +192,27 @@
         margin-top: 10px;
         visibility: hidden;
     }
-
 </style>
 
 <script>
     var count = 0;
+    var ccount = 0;
+    var cccount = 0;
+    var wcount = 0;
 
     function addToDo() {
         if (addValue.value == "") {} else {
-            
-            count++;
-            todoCount.textContent = count;
+
+            plCount();
 
             const li = document.createElement("li"); // li 선언
 
             li.setAttribute('id', "result");
+
+            const ckbox = document.createElement("input"); // 체크박스 선언
+
+            ckbox.setAttribute('class', "ckbox");
+            ckbox.setAttribute('type', "checkbox");
 
             const textbar = document.createElement('div'); // li안 글자쓸 공간 선언
 
@@ -206,6 +238,9 @@
 
             addValue.value = ""; // 입력시 인풋태그 비움
             addValue.focus(); // 입력후 포커스
+
+            ckbox.addEventListener("click", compCountck);
+            document.getElementById('list').appendChild(li).appendChild(ckbox); //li에 체크박스 추가
 
             document.getElementById('list').appendChild(li).appendChild(textbar); //li에 텍스트바 추가
 
@@ -241,12 +276,36 @@
             addToDo();
         }
     }
-
+    
+    function plCount() {
+        count++;
+        todoCount.textContent = "할일 " + count;
+        waitCountck();
+    }
+    
+    function miCount() {
+        count--;
+        todoCount.textContent = "할일 " + count;
+        waitCountck();
+    }
+    
+    function compCountck() {
+        ccount = document.querySelectorAll('input[type="checkbox"]:checked');
+        compCount.textContent = "완료 " + ccount.length;
+        cccount = ccount.length;
+        waitCountck();
+    }
+    
+    function waitCountck() {
+        wcount = count - cccount;
+        waitCount.textContent = "대기 " + wcount;
+    }
+    
     function deleteList(e) {
         var dtg = e.target.parentElement;
         dtg.remove();
-        count--;
-        todoCount.textContent = count;
+        miCount();
+        compCountck();
     }
 
     function delmodal() {
@@ -256,13 +315,15 @@
 
     function deleteAll() {
         count = 0;
-        todoCount.textContent = count;
+        cccount = 0;
+        todoCount.textContent = "할일 " + count;
+        compCount.textContent = "완료 " + 0;
+        waitCount.textContent = "대기 " + 0;
         list.innerText = "";
-        modal.remove();
-        model2.style.visibility = "hidden";
+        delmodal();
     }
-    
 
+    
 </script>
 
 <body id="body">
@@ -278,12 +339,12 @@
         </ul>
     </div>
     <div class="footer">
-        <div id="todoCount">0</div>
+        <div id="todoCount">할일 0</div>
+        <div id="compCount">완료 0</div>
+        <div id="waitCount">대기 0</div>
 
         <button type="button" id="model2" onclick="delmodal()">닫기</button>
 
         <button type="button" id="alldelbtn" onclick="deleteAll()">전부 삭제</button>
     </div>
-</body>
-
-</html>
+</body></html>
