@@ -13,7 +13,7 @@ $(function () {
 
         } else if (txt == "") { // 처음 입력
             if (!$.isNumeric(inputData)) { // 첫 글자가 숫자가 아니면 입력 X
-                if (inputData == "." || inputData == "(") { //., 괄호등은 처음 입력 가능하게 예외
+                if (inputData == "." || inputData == "(" || inputData == "-") { //., 괄호등은 처음 입력 가능하게 예외
                     txt += inputData;
                     $('#addValue').val(txt);
                 }
