@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
+    * {
+        text-align: center;
+        font-family: 'Nanum Pen Script', cursive;
+        font-size: 30px;
+    }
+
+    body {
+        margin: auto;
+        margin-top: 50px;
+        width: 700px;
+        border: 2px solid;
+        border-radius: 7px;
+    }
+
+    .header>.headeLine {
+        font-size: 40px;
+    }
+
+    .upload {
+        position: relative;
+        margin: auto;
+        width: 90%;
+    }
+
+    .upload>#addValue {
+        position: relative;
+        width: 80%;
+        border: 2px solid;
+        border-radius: 3px;
+        background-color: floralwhite
+    }
+
+    .upload>.inbtn {
+        position: relative;
+        width: 10%;
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .container {
+        position: relative;
+        margin-left: 33.3px;
+        margin-top: 15px;
+        width: 91.7%;
+        height: 300px;
+        overflow-y: scroll;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        /* 스크롤바의 너비 */
+        border-radius: 5px;
+        display: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        height: 10px;
+        /* 스크롤바의 길이 */
+        background: #999999;
+        /* 스크롤바의 색상 */
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, .1);
+        /*스크롤바 뒷 배경 색상*/
+    }
+
+    #list {
+        position: relative;
+        margin-top: 0px;
+    }
+
+    #list>li {
+        position: relative;
+        margin-bottom: 8px;
+        margin-left: -15.5px;
+        width: 96.5%;
+        border: 2px solid;
+        border-radius: 3px;
+        list-style: none;
+        display: flex;
+        background-color: floralwhite
+    }
+
+    #list>li:hover {
+        transform: scale(1.03);
+        transition-duration: 0.3s;
+
+    }
+
+    #list>li>.ckbox {
+        width: 25px;
+    }
+
+    #list>li>.ckbox:checked {
+        background-color: gainsboro;
+    }
+
+    #list>li>#textbar {
+        width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+
+    #list>li>#del {
+        margin-left: auto;
+        border: none;
+        border-left: 2px solid;
+    }
+
+    #body>#modal {
+        position: absolute;
+        width: 640px;
+        height: 355px;
+        left: 50%;
+        margin-left: -322px;
+        top: 150px;
+        border: 2px solid;
+        z-index: 2;
+        background-color: white;
+        word-break: break-all;
+        text-align: left;
+        overflow-y: scroll;
+        border-radius: 5px;
+        letter-spacing: 1px;
+        line-height: 120%;
+        background-color: floralwhite
+    }
+
+    .footer {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .footer>#todoCount {
+        position: absolute;
+        cursor: pointer;
+        width: 90px;
+        margin-left: 5px;
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .footer>#compCount {
+        position: absolute;
+        cursor: pointer;
+        width: 90px;
+        margin-left: 90px;
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .footer>#waitCount {
+        position: absolute;
+        cursor: pointer;
+        width: 90px;
+        margin-left: 175px;
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .footer>#alldelbtn {
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100px;
+        margin-left: 190px;
+        margin-top: 10px;
+    }
+
+    .footer>#model2 {
+        position: relative;
+        border: 2px solid;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100px;
+        margin-left: 300px;
+        margin-top: 10px;
+        visibility: hidden;
+    }
+</style>
+
+<script>
+    var count = 0;
+    var ccount = 0;
+    var cccount = 0;
+    var wcount = 0;
+
+    function addToDo() {
+        if (addValue.value == "") {} else {
+
+            plCount();
+
+            const li = document.createElement("li"); // li 선언
+
+            li.setAttribute('id', "result");
+
+            const ckbox = document.createElement("input"); // 체크박스 선언
+
+            ckbox.setAttribute('class', "ckbox");
+            ckbox.setAttribute('type', "checkbox");
+
+            const textbar = document.createElement('div'); // li안 글자쓸 공간 선언
+
+            textbar.setAttribute('id', "textbar");
+
+            const modal = document.createElement('div'); // modal 선언
+
+            modal.setAttribute('id', "modal");
+
+            const del = document.createElement('button'); // 삭제버튼 선언
+
+            del.setAttribute('id', "del");
+
+            const model = document.createElement('button'); // 삭제버튼 선언
+            model.setAttribute('id', "model");
+
+            const addValue2 = document.getElementById('addValue').value; // 글자를 변수로
+
+            const textNode = document.createTextNode(addValue2); // 글자를 text바 안에 집어넣음
+            textbar.appendChild(textNode);
+
+
+
+            addValue.value = ""; // 입력시 인풋태그 비움
+            addValue.focus(); // 입력후 포커스
+
+            ckbox.addEventListener("click", compCountck);
+            document.getElementById('list').appendChild(li).appendChild(ckbox); //li에 체크박스 추가
+
+            document.getElementById('list').appendChild(li).appendChild(textbar); //li에 텍스트바 추가
+
+            del.append("x");
+            del.addEventListener("click", deleteList);
+            document.getElementById('list').appendChild(li).appendChild(del); //li에 삭제버튼 추가
+
+            //            var onoff = 0; // 누르면 줄이 생겼다 사라졌다 할 수 있게
+            //            li.addEventListener("click", function() {                
+            //                onoff++;              클릭으로 줄긋기
+            //                if (onoff % 2 == 1) {
+            //                    textbar.style.textDecoration = "line-through";
+            //                    textbar.style.color = "gray";
+            //                } else {
+            //                    textbar.style.textDecoration = "none";
+            //                    textbar.style.color = "black";
+            //                }
+            //            })
+
+            textbar.addEventListener("click", function() {
+                model2.style.visibility = "visible";
+                modal.textContent = textbar.textContent;
+                document.getElementById('body').appendChild(modal); //li에 모달 추가
+            })
+
+        }
+
+    }
+
+
+    function enterkey() {
+        if (window.event.keyCode == 13) {
+            addToDo();
+        }
+    }
+    
+    function plCount() {
+        count++;
+        todoCount.textContent = "할일 " + count;
+        waitCountck();
+    }
+    
+    function miCount() {
+        count--;
+        todoCount.textContent = "할일 " + count;
+        waitCountck();
+    }
+    
+    function compCountck() {
+        ccount = document.querySelectorAll('input[type="checkbox"]:checked');
+        compCount.textContent = "완료 " + ccount.length;
+        cccount = ccount.length;
+        waitCountck();
+    }
+    
+    function waitCountck() {
+        wcount = count - cccount;
+        waitCount.textContent = "대기 " + wcount;
+    }
+    
+    function deleteList(e) {
+        var dtg = e.target.parentElement;
+        dtg.remove();
+        miCount();
+        compCountck();
+    }
+
+    function delmodal() {
+        modal.remove();
+        model2.style.visibility = "hidden";
+    }
+
+    function deleteAll() {
+        count = 0;
+        cccount = 0;
+        todoCount.textContent = "할일 " + count;
+        compCount.textContent = "완료 " + 0;
+        waitCount.textContent = "대기 " + 0;
+        list.innerText = "";
+        delmodal();
+    }
+
+    
+</script>
+
+<body id="body">
+    <div class="header">
+        <h1 class="headeLine">할 일</h1>
+        <div class="upload">
+            <input type="text" id="addValue" placeholder="일정 추가..." onkeypress="enterkey()" autofocus />
+            <button type="button" class="inbtn" onclick="addToDo()">추가</button>
+        </div>
+    </div>
+    <div class="container">
+        <ul id="list">
+        </ul>
+    </div>
+    <div class="footer">
+        <div id="todoCount">할일 0</div>
+        <div id="compCount">완료 0</div>
+        <div id="waitCount">대기 0</div>
+
+        <button type="button" id="model2" onclick="delmodal()">닫기</button>
+
+        <button type="button" id="alldelbtn" onclick="deleteAll()">전부 삭제</button>
+    </div>
+</body></html>
